@@ -13,9 +13,9 @@ Resources:
         IndexDocument: index.html
       Tags:
         - Key: Name
-          Value: demo-bucket-productos
+          Value: "demo-bucket-productos"
         - key: lm_troux_uid
-          value: 123456
+          value: "123456"
 
 #Outputs:
 #  BucketName:
