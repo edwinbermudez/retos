@@ -5,7 +5,7 @@ Resources:
   S3Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: !Sub ${AWS::StackName}-demo-bucket-productos-${AWS::AccountId}
+      BucketName: demo-bucket-productos
       AccessControl: Private
       VersioningConfiguration:
         Status: Enabled
