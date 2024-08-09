@@ -1,7 +1,9 @@
 name: Pull Request workflow
 
 on:
-  - push
+  push:
+    branches:
+      - main
 
 jobs:
   cloudformation-linter:
