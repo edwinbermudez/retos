@@ -10,7 +10,7 @@ Resources:
       VersioningConfiguration:
         Status: Enabled
       WebsiteConfiguration:
-        IndexDocument: index.html
+        IndexDocument: productos.html
       Tags:
         - Key: Name
           Value: demo-bucket-productos
