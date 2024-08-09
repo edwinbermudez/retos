@@ -1,0 +1,18 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Plantilla de CloudFormation para la creación de la infraestructura necesaria para el despliegue de la aplicacion de productos
+
+Resources:
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Sub ${AWS::StackName}-demo-bucket-productos-${AWS::AccountId}
+      AccessControl: Private
+      VersioningConfiguration:
+        Status: Enabled
+      WebsiteConfiguration:
+        IndexDocument: index.html
+      Tags:
+        - Key: Name
+          Value: demo-bucket-productos
+        - key: lm_troux_uid
+          value: 123456
