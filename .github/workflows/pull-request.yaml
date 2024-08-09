@@ -13,4 +13,4 @@ jobs:
       - name: Linter install
         uses: scottbrenner/cfn-lint-action@v2
         with:
-          command: cfn-lint -t ./vpc.yaml
+          command: cfn-lint -t ./kibernum/infra_template.yaml
