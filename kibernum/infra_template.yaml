@@ -13,14 +13,25 @@ Resources:
         IndexDocument: index.html
       Tags:
         - Key: Name
-          Value: "demo-bucket-productos"
+          Value: demo-bucket-productos
         - key: lm_troux_uid
-          value: "123456"
+          value: '123456'
 
-#Outputs:
-#  BucketName:
-#    Description: Nombre del bucket creado
-#    Value: !Ref S3Bucket
-#    WebsiteURL:
-#      Description: URL del sitio web del bucket
-#      Value: !GetAtt S3Bucket.WebsiteURL
+  S3BucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref S3Bucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Sub 'arn:aws:s3:::${S3Bucket}/*'
+
+Outputs:
+  BucketName:
+    Description: Nombre del bucket de S3
+    Value: !Ref S3Bucket
+    Export:
+      Name: MyS3BucketName
