@@ -1,7 +1,7 @@
 name: Pull Request workflow
 
 on:
-  - pull_request
+  - push
 
 jobs:
   cloudformation-linter:
