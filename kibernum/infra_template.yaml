@@ -17,10 +17,10 @@ Resources:
         - key: lm_troux_uid
           value: 123456
 
-Outputs:
-  BucketName:
-    Description: Nombre del bucket creado
-    Value: !Ref S3Bucket
-    WebsiteURL:
-      Description: URL del sitio web del bucket
-      Value: !GetAtt S3Bucket.WebsiteURL
+#Outputs:
+#  BucketName:
+#    Description: Nombre del bucket creado
+#    Value: !Ref S3Bucket
+#    WebsiteURL:
+#      Description: URL del sitio web del bucket
+#      Value: !GetAtt S3Bucket.WebsiteURL
