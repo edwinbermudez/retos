@@ -14,7 +14,7 @@ Resources:
         - Key: Name
           Value: demo-bucket-productos
         - Key: lm_troux_uid
-          Value: '123456'
+          Value: 123456
 
   S3BucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
