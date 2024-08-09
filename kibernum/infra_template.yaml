@@ -6,7 +6,6 @@ Resources:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName: demo-bucket-productos
-      AccessControl: Private
       VersioningConfiguration:
         Status: Enabled
       WebsiteConfiguration:
@@ -14,8 +13,8 @@ Resources:
       Tags:
         - Key: Name
           Value: demo-bucket-productos
-        - key: lm_troux_uid
-          value: '123456'
+        - Key: lm_troux_uid
+          Value: 123456
 
   S3BucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
