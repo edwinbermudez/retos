@@ -19,10 +19,11 @@ resource "aws_subnet" "k8s_private_subnet" {
 
 # Create public subnets
 resource "aws_subnet" "k8s_public_subnet" {
-  count             = length(var.aws_subnet_public)
-  vpc_id            = aws_vpc.k8s_vpc.id
-  cidr_block        = var.aws_subnet_public[count.index]
-  availability_zone = element(split(",", var.aws_availability_zone), count.index)
+  count                   = length(var.aws_subnet_public)
+  vpc_id                  = aws_vpc.k8s_vpc.id
+  cidr_block              = var.aws_subnet_public[count.index]
+  availability_zone       = element(split(",", var.aws_availability_zone), count.index)
+  map_public_ip_on_launch = true
   tags = {
     Name = "k8s_public_subnet_${count.index}"
   }
@@ -74,7 +75,7 @@ resource "aws_nat_gateway" "k8s_nat_gateway" {
 resource "aws_route_table" "k8s_private_route_table" {
   vpc_id = aws_vpc.k8s_vpc.id
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.k8s_nat_gateway.id
   }
   tags = {
