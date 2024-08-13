@@ -1,16 +1,20 @@
 #!/bin/bash
 
+# Variables de entorno
 POD_CIDR=10.244.0.0/16
 SERVICE_CIDR=10.96.0.0/16
 PRIMARY_IP=$(hostname -I | awk '{print $1}')
 
-sudo kubeadm init --pod-network-cidr $POD_CIDR --service-cidr $SERVICE_CIDR --apiserver-advertise-address $PRIMARY_IP
+# Inicializar cluster
+sudo kubeadm init --pod-network-cidr $POD_CIDR --service-cidr $SERVICE_CIDR --apiserver-advertise-address $PRIMARY_IP | tee kubeadm_init_output.txt
 
+# Configurar kubectl
 mkdir ~/.kube
 sudo cp /etc/kubernetes/admin.conf ~/.kube/config
 sudo chown $(id -u):$(id -g) ~/.kube/config
 chmod 600 ~/.kube/config
 
+# Verificar los pods
 kubectl get pods -n kube-system
 
 # Install Calico
