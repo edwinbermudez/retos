@@ -38,6 +38,10 @@ sudo apt-get install -y containerd
 sudo mkdir -p /etc/containerd
 sudo containerd config default | sudo tee /etc/containerd/config.toml
 
+# Cambiar la versión de la imagen de pause a la ultima versión
+sudo sed -i 's|registry.k8s.io/pause:3.8|registry.k8s.io/pause:3.9|g' /etc/containerd/config.toml
+grep -n 'pause' /etc/containerd/config.toml
+
 # Modificar el archivo de configuración de containerd para que use systemd como cgroup
 sudo sed -i 's/            SystemdCgroup = false/            SystemdCgroup = true/' /etc/containerd/config.toml
 
@@ -64,11 +68,11 @@ sudo mkdir -p /etc/apt/keyrings
 
 # Descarga la llaves publicas del repositorio de kubernetes
 sudo curl -fsSL https://pkgs.k8s.io/core:/stable:/${KUBE_LATEST}/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-
+sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
 # Agregar el repositorio de kubernetes
 sudo echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${KUBE_LATEST}/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-
+sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list
 # Actualizar los paquetes
 sudo apt-get update
 
