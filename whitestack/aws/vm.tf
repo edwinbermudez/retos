@@ -17,7 +17,7 @@ resource "aws_instance" "k8s_vm_custom" {
  
               # Descargar y ejecutar el script de la configuracion del nodo
               curl -O https://raw.githubusercontent.com/edwinbermudez/retos/main/whitestack/configuracion_nodo.sh
-              sudoo chmod +x configuracion_nodo.sh
+              sudo chmod +x configuracion_nodo.sh
               sudo ./configuracion_nodo.sh >> configuracion_nodo.log
 
               # Descargar y ejecutar el script de la configuracion del nodo
