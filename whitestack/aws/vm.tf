@@ -12,6 +12,19 @@ resource "aws_instance" "k8s_vm_custom" {
   tags = {
     Name = "k8s_vm_custom"
   }
+  #user_data = <<-EOF
+  #            #!/bin/bash
+#
+  #            # Descargar y ejecutar el script de la configuracion del nodo
+  #            wget https://github.com/edwinbermudez/retos/blob/963b77c263ca26be330142e969357058826f1ef0/whitestack/configuracion_nodo.sh
+  #            chmod +x configuracion_nodo.sh
+  #            ./configuracion_nodo.sh >> configuracion_nodo.log
+#
+  #            # Descargar y ejecutar el script de la configuracion del control plane
+  #            curl -O https://github.com/edwinbermudez/retos/blob/963b77c263ca26be330142e969357058826f1ef0/whitestack/control_plane.sh
+  #            chmod +x control_plane.sh.sh
+  #            ./control_plane.sh.sh ~/configuracion_nodo.log
+  #            EOF
 }
 
 resource "aws_security_group" "k8s_sg_custom" {
