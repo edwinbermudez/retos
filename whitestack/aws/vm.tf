@@ -1,4 +1,4 @@
-# Creacion de una instancia de AWS EC2 personalizada
+  # Creacion de una instancia de AWS EC2 personalizada
 
 
 # Definir la instancia EC2
@@ -17,11 +17,13 @@ resource "aws_instance" "k8s_vm_custom" {
  
               # Descargar y ejecutar el script de la configuracion del nodo
               curl -O https://raw.githubusercontent.com/edwinbermudez/retos/main/whitestack/configuracion_nodo.sh
+              sleep 1
               sudo chmod +x configuracion_nodo.sh
               sudo ./configuracion_nodo.sh >> configuracion_nodo.log
 
               # Descargar y ejecutar el script de la configuracion del nodo
               curl -O https://raw.githubusercontent.com/edwinbermudez/retos/main/whitestack/control_plane.sh
+              sleep 1
               sudo chmod +x control_plane.sh
               sudo ./control_plane.sh >> control_plane.log
               EOF
