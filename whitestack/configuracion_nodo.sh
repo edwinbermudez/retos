@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Comentar las siguientes lineas en el archivo /etc/sysctl.d/50-default.conf
+sudo sed -i 's/^\-net\.ipv4\.conf\.all\.accept_source_route/#&/' /usr/lib/sysctl.d/50-default.conf
+sudo sed -i 's/^\-net\.ipv4.conf.all\.promote_secondaries/#&/' /usr/lib/sysctl.d/50-default.conf
+sudo sysctl --system
+
+
 # Desactivar el swap memory en la máquina virtual
 sudo sed -i '/[[:space:]]swap[[:space:]]/ s/^\(.*\)$/#\1/' /etc/fstab
 grep -n 'swap' /etc/fstab
@@ -39,7 +45,7 @@ sudo mkdir -p /etc/containerd
 sudo containerd config default | sudo tee /etc/containerd/config.toml
 
 # Cambiar la versión de la imagen de pause a la ultima versión
-sudo sed -i 's|registry.k8s.io/pause:3.8|registry.k8s.io/pause:3.9|g' /etc/containerd/config.toml
+sudo sed -i 's|registry.k8s.io/pause:3.8|registry.k8s.io/pause:3.10|g' /etc/containerd/config.toml
 grep -n 'pause' /etc/containerd/config.toml
 
 # Modificar el archivo de configuración de containerd para que use systemd como cgroup
@@ -90,7 +96,7 @@ sudo crictl config \
     --set runtime-endpoint=unix:///run/containerd/containerd.sock \
     --set image-endpoint=unix:///run/containerd/containerd.sock
 
-PRIMARY_IP=$(hostname -I | awk '{print $2}')
+PRIMARY_IP=$(hostname -I | awk '{print $1}')
 
 cat <<EOF | sudo tee /etc/default/kubelet
 KUBELET_EXTRA_ARGS='--node-ip ${PRIMARY_IP}'

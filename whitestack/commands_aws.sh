@@ -22,6 +22,13 @@ route -n
 
 #
 sudo vim /usr/lib/sysctl.d/50-default.conf
+
+
+# Check if the accept_source_route parameter is set in the sysctl configuration file
+grep "-net.ipv4.conf.all.accept_source_route/"  /usr/lib/sysctl.d/50-default.conf
+
+sudo sed -i 's/^\-net\.ipv4\.conf\.all\.accept_source_route/#&/' /usr/lib/sysctl.d/50-default.conf
+sudo sed -i 's/^\-net\.ipv4.conf.all\.promote_secondaries/#&/' /usr/lib/sysctl.d/50-default.conf
 sudo sysctl --system
 
 # Añadir usuario al sudoers
@@ -32,3 +39,8 @@ sudo -l -U ehbc
 # Pause:3.9
 kubeadm config images list | sort" [v1.26.0]
 sudo rm -f /etc/kubernetes/manifests/*.yaml
+
+whitestack/configuracion_nodo.sh
+curl -O https://raw.githubusercontent.com/edwinbermudez/retos/main/whitestack/configuracion_nodo.sh
+
+curl -O https://raw.githubusercontent.com/edwinbermudez/retos/main/whitestack/control_plane.sh
