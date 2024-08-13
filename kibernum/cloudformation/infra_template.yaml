@@ -35,12 +35,18 @@ Resources:
               Action: 's3:GetObject'
               Resource: !Sub 'arn:aws:s3:::${S3Bucket}/*'
 
+  CloudFrontOriginAccessIdentity:
+    Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity'
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: Access Identity for S3 Bucket
+
       # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-distribution.html
       CloudFrontDistribution:
         Type: AWS::CloudFront::Distribution
         Properties: 
           DistributionConfig:
-            Enabled: 'true'
+            Enabled: true
             Origins:
               - DomainName: !GetAtt S3Bucket.DomainName
                 Id: "${BucketName}Origin"
@@ -56,12 +62,12 @@ Resources:
                 - GET
                 - HEAD
               ForwardedValues:
-                QueryString: 'false'
+                QueryString: false
                 Cookies:
                   Forward: none
-              Compress: 'true'
+              Compress: true
               ViewerCertificate:
-                CloudFrontDefaultCertificate: 'true'
+                CloudFrontDefaultCertificate: true
             DefaultRootObject: index.html
           Tags: 
             - Key: lm_troux_uid
