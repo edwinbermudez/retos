@@ -3,10 +3,9 @@ var API_ENDPOINT = "Paste endpoint URL"
 //AJAX GET REQUEST
 document.getElementById("saveprofile").onclick = function(){
   var inputData = {
-    "empId":$('#empid').val(),
-        "empFirstName":$('#fname').val(),
-        "empLastName":$('#lname').val(),
-    "empAge":$('#empage').val()           
+    "id":$('#id').val(),
+      "prodNombre":$('#pname').val(),    
+        "prodCantidad":$('#pcantidad').val()
       };
   $.ajax({
         url: API_ENDPOINT,
@@ -28,13 +27,12 @@ document.getElementById("getprofile").onclick = function(){
         type: 'GET',
          contentType: 'application/json; charset=utf-8',
         success: function (response) {
-          $('#employeeProfile tr').slice(1).remove();
+          $('#productosPerfil tr').slice(1).remove();
           jQuery.each(response, function(i,data) {          
-            $("#employeeProfile").append("<tr> \
-                <td>" + data['empId'] + "</td> \
-                <td>" + data['empFirstName'] + "</td> \
-                <td>" + data['empLastName'] + "</td> \
-                <td>" + data['empAge'] + "</td> \
+            $("#productosPerfil").append("<tr> \
+                <td>" + data['id'] + "</td> \
+                <td>" + data['prodNombre'] + "</td> \
+                <td>" + data['prodCantidad'] + "</td> \
                 </tr>");
           });
         },
