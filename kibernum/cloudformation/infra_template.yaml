@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Plantilla de CloudFormation para la creación de la infraestructura necesaria para el despliegue de la aplicacion de productos
+
+Parameters:
+  BucketName:
+    Description: Nombre del bucket S3
+    Type: String
+    Default: demo-bucket-productos
+
+Resources:
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Ref BucketName
+      VersioningConfiguration:
+        Status: Enabled
+      WebsiteConfiguration:
+        IndexDocument: index.html
+      Tags:
+        - Key: Name
+          Value: !Ref BucketName
+        - Key: lm_troux_uid
+          Value: 123
+
+  #S3BucketPolicy:
+  #  Type: 'AWS::S3::BucketPolicy'
+  #  Properties:
+  #    Bucket: !Ref S3Bucket
+  #    PolicyDocument:
+  #      Version: '2012-10-17'
+  #      Statement:
+  #        - Effect: Allow
+  #          Principal: '*'
+  #          Action: 's3:GetObject'
+  #          Resource: !Sub 'arn:aws:s3:::${S3Bucket}/*'
+
+Outputs:
+  BucketName:
+    Description: Nombre del bucket de S3
+    Value: !Ref BucketName
