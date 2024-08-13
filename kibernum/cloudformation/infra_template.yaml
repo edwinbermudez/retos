@@ -95,6 +95,7 @@ Resources:
         ZipFile: |
           import json
           import boto3
+          import cfnresponse
 
           def handler(event, context):
               dynamodb = boto3.resource('dynamodb')
@@ -105,14 +106,14 @@ Resources:
                   {"Id": 2, "Nombre": "Cebolla", "Cantidad": 5}
               ]
               
-              with table.batch_writer() as batch:
-                  for item in items:
-                      batch.put_item(Item=item)
-              
-              return {
-                  'statusCode': 200,
-                  'body': json.dumps('Items inserted successfully')
-              }
+              try:
+                  with table.batch_writer() as batch:
+                      for item in items:
+                          batch.put_item(Item=item)
+                  
+                  cfnresponse.send(event, context, cfnresponse.SUCCESS, {'Message': 'Items inserted successfully'})
+              except Exception as e:
+                  cfnresponse.send(event, context, cfnresponse.FAILED, {'Message': str(e)})
       Runtime: python3.8
       Timeout: 300
 
@@ -136,6 +137,16 @@ Resources:
                   - dynamodb:BatchWriteItem
                   - dynamodb:PutItem
                 Resource: !GetAtt DDBTable.Arn
+        - PolicyName: CloudWatchLogsPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
 
   CustomResource:
     Type: 'Custom::InsertInitialData'
