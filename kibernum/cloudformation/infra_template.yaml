@@ -53,7 +53,10 @@ Resources:
         Enabled: true
         DefaultCacheBehavior:
           TargetOriginId: S3Origin
-          ViewerProtocolPolicy: allow-all
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+            - GET
+            - HEAD
           CachedMethods:
             - GET
             - HEAD
