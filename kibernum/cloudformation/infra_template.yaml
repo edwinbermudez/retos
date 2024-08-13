@@ -33,7 +33,7 @@ Resources:
               Principal:
                 CanonicalUser: !GetAtt CloudFrontOriginAccessIdentity.S3CanonicalUserId
               Action: 's3:GetObject'
-              Resource: !Sub 'arn:aws:s3:::${S3Bucket}/*'
+              Resource: !Sub 'arn:aws:s3:::${BucketName}/*'
 
   CloudFrontOriginAccessIdentity:
     Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity'
