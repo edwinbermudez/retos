@@ -76,10 +76,6 @@ Resources:
       AttributeDefinitions:
         - AttributeName: 'Id'
           AttributeType: 'N'
-        - AttributeName: 'Nombre'
-          AttributeType: 'S'
-        - AttributeName: 'Cantidad'
-          AttributeType: 'N'
       KeySchema:
         - AttributeName: 'Id'
           KeyType: 'HASH'
