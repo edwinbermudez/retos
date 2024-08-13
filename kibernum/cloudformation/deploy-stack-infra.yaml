@@ -1,4 +1,4 @@
-template-file-path: infra_template.yaml
+template-file-path: kibernum/cloudformation/infra_template.yaml
 
 parameters: 
   BucketName: 'kibernum-bucket-productos'
