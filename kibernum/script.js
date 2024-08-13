@@ -3,9 +3,9 @@ var API_ENDPOINT = "Paste endpoint URL"
 //AJAX GET REQUEST
 document.getElementById("saveprofile").onclick = function(){
   var inputData = {
-    "id":$('#id').val(),
-      "prodNombre":$('#pname').val(),    
-        "prodCantidad":$('#pcantidad').val()
+    "Id":$('#id').val(),
+      "Nombre":$('#pname').val(),    
+        "Cantidad":$('#pcantidad').val()
       };
   $.ajax({
         url: API_ENDPOINT,
@@ -30,9 +30,9 @@ document.getElementById("getprofile").onclick = function(){
           $('#productosPerfil tr').slice(1).remove();
           jQuery.each(response, function(i,data) {          
             $("#productosPerfil").append("<tr> \
-                <td>" + data['id'] + "</td> \
-                <td>" + data['prodNombre'] + "</td> \
-                <td>" + data['prodCantidad'] + "</td> \
+                <td>" + data['Id'] + "</td> \
+                <td>" + data['Nombre'] + "</td> \
+                <td>" + data['Cantidad'] + "</td> \
                 </tr>");
           });
         },

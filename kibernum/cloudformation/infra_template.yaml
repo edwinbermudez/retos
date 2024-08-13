@@ -68,6 +68,29 @@ Resources:
       Tags: 
         - Key: lm_troux_uid
           Value: 123
+  
+  DDBTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: 'Products'
+      AttributeDefinitions:
+        - AttributeName: 'Id'
+          AttributeType: 'N'
+        - AttributeName: 'Nombre'
+          AttributeType: 'S'
+        - AttributeName: 'Cantidad'
+          AttributeType: 'N'
+      KeySchema:
+        - AttributeName: 'id'
+          KeyType: 'HASH'
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      Tags:
+        - Key: lm_troux_uid
+          Value: 123
+
+
 
 Outputs:
   BucketName:
@@ -76,3 +99,6 @@ Outputs:
   CloudFrontDistributionDomainName:
     Description: URL de la distribución de CloudFront
     Value: !GetAtt CloudFrontDistribution.DomainName
+  DDBTableName:
+    Description: Nombre de la tabla de DynamoDB
+    Value: !Ref DDBTable
