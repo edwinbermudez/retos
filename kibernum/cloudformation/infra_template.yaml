@@ -36,7 +36,7 @@ Resources:
               Resource: !Sub 'arn:aws:s3:::${S3Bucket}/*'
 
       # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-distribution.html
-      CloudFrontDistribution
+      CloudFrontDistribution:
         Type: AWS::CloudFront::Distribution
         Properties: 
           DistributionConfig:
