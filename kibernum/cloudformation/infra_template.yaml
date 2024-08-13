@@ -20,6 +20,12 @@ Resources:
           Value: !Ref BucketName
         - Key: lm_troux_uid
           Value: 123
+    
+    CloudFrontOriginAccessIdentity:
+      Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity'
+      Properties:
+        CloudFrontOriginAccessIdentityConfig:
+          Comment: Access Identity for S3 Bucket
 
     S3BucketPolicy:
       Type: 'AWS::S3::BucketPolicy'
@@ -35,15 +41,9 @@ Resources:
               Action: 's3:GetObject'
               Resource: !Sub 'arn:aws:s3:::${BucketName}/*'
 
-  CloudFrontOriginAccessIdentity:
-    Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity'
-    Properties:
-      CloudFrontOriginAccessIdentityConfig:
-        Comment: Access Identity for S3 Bucket
-
       # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-distribution.html
       CloudFrontDistribution:
-        Type: AWS::CloudFront::Distribution
+        Type: 'AWS::CloudFront::Distribution'
         Properties: 
           DistributionConfig:
             Enabled: true
