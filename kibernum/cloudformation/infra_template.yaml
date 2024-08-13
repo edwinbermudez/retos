@@ -5,7 +5,6 @@ Parameters:
   BucketName:
     Description: Nombre del bucket S3
     Type: String
-    Default: demo-bucket-productos
 
 Resources:
   S3Bucket:
