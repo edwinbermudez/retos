@@ -1,0 +1,11 @@
+template-file-path: infra_template.yaml
+
+parameters: 
+  BucketName: 'kibernum-bucket-productos'
+tags:
+    lm_troux_uid: '123'
+    deploy: 'CloudFormation'
+    owner: 'Edwin Bermudez'
+    project: 'productos'
+    environment: 'prod'
+    team: 'kibernum'
