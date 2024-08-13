@@ -81,16 +81,11 @@ Resources:
         - AttributeName: 'Cantidad'
           AttributeType: 'N'
       KeySchema:
-        - AttributeName: 'id'
+        - AttributeName: 'Id'
           KeyType: 'HASH'
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
-      Tags:
-        - Key: lm_troux_uid
-          Value: 123
-
-
 
 Outputs:
   BucketName:
