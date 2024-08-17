@@ -1,0 +1,56 @@
+wordpressEmail: {{ .Values.wordpressEmail }}
+wordpressFirstName: {{ .Values.wordpressFirstName }}
+wordpressLastName: {{ .Values.wordpressLastName }}
+wordpressBlogName: {{ .Values.wordpressBlogName }}
+
+service:
+  type: ClusterIP
+
+mariadb:
+  auth:
+    rootPassword: {{ .Values.mariadb.auth.rootPassword }}
+    username: {{ .Values.mariadb.auth.username }}
+    password: {{ .Values.mariadb.auth.password }}
+    database: {{ .Values.mariadb.auth.database }}
+  primary:
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClass: local-path
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 200m
+        memory: 512Mi
+
+wordpress:
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClass: local-path
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 512Mi
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  hosts:
+    - name: wordpress.local
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: wordpress
+              port:
+                number: 8080
+  tls: false

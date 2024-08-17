@@ -1,13 +1,17 @@
 #!/bin/bash
 
+# Descargar las imagenes de los componentes de Kubernetes 
+sudo kubeadm config images pull
+
 # Variables de entorno
-POD_CIDR=10.244.0.0/16
-SERVICE_CIDR=10.96.0.0/16
+POD_CIDR=172.16.0.0/16
+CRI_SOCKET=unix:///run/containerd/containerd.sock
 PRIMARY_IP=$(hostname -I | awk '{print $1}')
+HOSTNAME_CP=c1-cp-01
 
 # Inicializar cluster
-sudo kubeadm init --pod-network-cidr $POD_CIDR --service-cidr $SERVICE_CIDR --apiserver-advertise-address $PRIMARY_IP | tee kubeadm_init_output.txt
-
+#sudo kubeadm init --pod-network-cidr=$POD_CIDR --cri-socket=$CRI_SOCKET --upload-certs --control-plane-endpoint=$HOSTNAME_CP 
+sudo kubeadm init --pod-network-cidr=$POD_CIDR --cri-socket=$CRI_SOCKET --upload-certs --apiserver-advertise-address $PRIMARY_IP 
 # Configurar kubectl
 mkdir ~/.kube
 sudo cp /etc/kubernetes/admin.conf ~/.kube/config
@@ -25,6 +29,11 @@ kubectl apply -f calico.yaml
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
 chmod 700 get_helm.sh
 ./get_helm.sh
+
+echo 'source <(kubectl completion bash)' >>~/.bashrc
+
+# Reload sourcefile again (located on home)
+source .bashrc 
 
 # Verificar control plane
 kubectl get pods --all-namespaces

@@ -1,0 +1,27 @@
+persistence:
+  enabled: true
+  size: 5Gi
+  storageClassName: "standard"
+adminPassword: "YOUR_SECURE_PASSWORD"
+service:
+  type: ClusterIP
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - grafana.ehbc.lab
+  tls:
+    - secretName: grafana-tls
+      hosts:
+        - grafana.ehbc.lab
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-server
+        access: proxy
+        isDefault: true

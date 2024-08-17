@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "wordpress.fullname" . }}
+  labels:
+    {{- include "wordpress.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "wordpress.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "wordpress.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: WORDPRESS_EMAIL
+              value: {{ .Values.wordpressEmail | quote }}
+            - name: WORDPRESS_FIRST_NAME
+              value: {{ .Values.wordpressFirstName | quote }}
+            - name: WORDPRESS_LAST_NAME
+              value: {{ .Values.wordpressLastName | quote }}
+            - name: WORDPRESS_BLOG_NAME
+              value: {{ .Values.wordpressBlogName | quote }}
+            - name: MARIADB_ROOT_PASSWORD
+              value: {{ .Values.mariadb.auth.rootPassword | quote }}
+            - name: MARIADB_USERNAME
+              value: {{ .Values.mariadb.auth.username | quote }}
+            - name: MARIADB_PASSWORD
+              value: {{ .Values.mariadb.auth.password | quote }}
+            - name: MARIADB_DATABASE
+              value: {{ .Values.mariadb.auth.database | quote }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
