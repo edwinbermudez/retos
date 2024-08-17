@@ -1,62 +1,67 @@
 #!/bin/bash
 
-# Comentar las siguientes lineas en el archivo /etc/sysctl.d/50-default.conf
-sudo sed -i 's/^\-net\.ipv4\.conf\.all\.accept_source_route/#&/' /usr/lib/sysctl.d/50-default.conf
-sudo sed -i 's/^\-net\.ipv4.conf.all\.promote_secondaries/#&/' /usr/lib/sysctl.d/50-default.conf
-sudo sysctl --system
-
-
-# Desactivar el swap memory en la máquina virtual
-sudo sed -i '/[[:space:]]swap[[:space:]]/ s/^\(.*\)$/#\1/' /etc/fstab
-grep -n 'swap' /etc/fstab
-
 # Actualizar paquetes del sistema
 sudo apt-get update
 sudo apt-get install -y apt-transport-https ca-certificates curl gpg
 
-# Prerrequisitos para instalar containerd
+# Prerrequisitos
 
-# Activar los módulos de kernel necesarios
+# 1. Desactivar el swap memory en la máquina virtual
+sudo sed -i '/[[:space:]]swap[[:space:]]/ s/^\(.*\)$/#\1/' /etc/fstab
+grep -n 'swap' /etc/fstab
+sudo swapoff -a
+sudo mount -a
+echo "Swap memory desactivada"
+free -h
+
+# 2. Activar los módulos de kernel necesarios
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
 EOF
 
-# Cargar los módulos de kernel
+# 3. Cargar los módulos de kernel
 sudo modprobe overlay
 sudo modprobe br_netfilter
 
-# Configurar los parámetros persistentes del kernel
+# 4. Configurar los parámetros persistentes del kernel
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
 EOF
 
-# Aplicar los cambios sin reiniciar
+# 5. Aplicar los cambios sin reiniciar
 sudo sysctl --system
 
-#Install containerd
-sudo apt-get update 
-sudo apt-get install -y containerd
+# 6. Instalar containerd
+# Instalacion de los paquetes necesarios
+sudo apt install -y curl gnupg2 software-properties-common apt-transport-https ca-certificates
+
+# Añadir el repositorio de Docker
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/docker-archive-keyring.gpg
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" -y
+
+# Instalar containerd
+sudo apt update
+sudo apt-get install -y containerd.io
 
 #Create a containerd configuration file
 sudo mkdir -p /etc/containerd
 sudo containerd config default | sudo tee /etc/containerd/config.toml
 
-# Cambiar la versión de la imagen de pause a la ultima versión
-sudo sed -i 's|registry.k8s.io/pause:3.8|registry.k8s.io/pause:3.10|g' /etc/containerd/config.toml
-grep -n 'pause' /etc/containerd/config.toml
+# Verificar la version instalada de containerd
+echo -e "\033[32mla versión instalada de containerd es $(containerd --version | awk '{print $3}')\033[0m"
 
 # Modificar el archivo de configuración de containerd para que use systemd como cgroup
 sudo sed -i 's/            SystemdCgroup = false/            SystemdCgroup = true/' /etc/containerd/config.toml
 
 # Verificar que el cambio se haya realizado correctamente
 if [ $? -eq 0 ]; then
-    echo "SystemdCgroup set to true"
+    echo -e "\033[32m SystemdCgroup fue activado \033[0m"
     grep -n 'SystemdCgroup' /etc/containerd/config.toml
 else
-    echo "SystemdCgroup set to false"
+    echo -e "\033[31m SystemdCgroup no fue activado\033[0m"
     exit 1
 fi
 
@@ -90,6 +95,8 @@ sudo apt-mark hold kubelet kubeadm kubectl containerd
 
 # Habilitar el servicio de kubelet
 sudo systemctl enable --now kubelet
+
+kubectl version --client && kubeadm version
 
 # Configurar crictl para examinar los contenedores de containerd
 sudo crictl config \

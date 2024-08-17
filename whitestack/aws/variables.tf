@@ -75,3 +75,15 @@ variable "sg_cidr_blocks" {
   type        = list(string)
   default     = ["0.0.0.0/0"]
 }
+
+variable "aws_worker_nodes_count" {
+  description = "Number of worker nodes"
+  type        = number
+  default     = 1
+}
+
+variable "aws_instance_type_bastion" {
+  description = "Instance type for bastion"
+  type        = string
+  default     = "t2.micro"
+}

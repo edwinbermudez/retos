@@ -1,0 +1,11 @@
+wordpressEmail: admin@ehbc.lab
+wordpressFirstName: Admin
+wordpressLastName: User
+wordpressBlogName: My WordPress Blog
+
+mariadb:
+  auth:
+    rootPassword: strongpassword
+    username: bn_wordpress
+    password: strongpassword
+    database: bitnami_wordpress

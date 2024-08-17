@@ -1,0 +1,62 @@
+controller:
+  replicaCount: 3  # Increase replicas for higher availability
+  resources:
+    requests:
+      cpu: 200m  # Increase CPU request
+      memory: 256Mi  # Increase memory request
+    limits:
+      cpu: 500m  # Increase CPU limit
+      memory: 512Mi  # Increase memory limit
+  nodeSelector:
+    # Añadir etiquetas para seleccionar nodos específicos
+    kubernetes.io/os: linux
+  tolerations:
+    # Añadir toleraciones para nodos taintados
+    - key: "node-role.kubernetes.io/master"
+      operator: "Exists"
+      effect: "NoSchedule"
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - ingress-nginx
+          topologyKey: "kubernetes.io/hostname"
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: 10254
+    initialDelaySeconds: 10
+    periodSeconds: 10
+  readinessProbe:
+    httpGet:
+      path: /healthz
+      port: 10254
+    initialDelaySeconds: 5
+    periodSeconds: 5
+
+defaultBackend:
+  enabled: true
+  replicaCount: 3  # Increase replicas for higher availability
+  resources:
+    requests:
+      cpu: 100m  # Increase CPU request
+      memory: 128Mi  # Increase memory request
+    limits:
+      cpu: 200m  # Increase CPU limit
+      memory: 256Mi  # Increase memory limit
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: 8080
+    initialDelaySeconds: 10
+    periodSeconds: 10
+  readinessProbe:
+    httpGet:
+      path: /healthz
+      port: 8080
+    initialDelaySeconds: 5
+    periodSeconds: 5
